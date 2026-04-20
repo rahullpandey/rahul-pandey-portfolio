@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { vertexShader, fragmentShader } from './HeroShaders';
 
 import imgSpiderman from '../assets/spiderman/20260407_055437.png';
-import imgMan from '../assets/man/1775519899126.png';
+import imgMan from '../assets/man/rahul-portrait.jpg';
 
 export default function Hero() {
   const containerRef = useRef(null);
@@ -70,7 +70,8 @@ export default function Hero() {
       uSoftness: { value: 0.15 }, // Softness of the edge
       uScale: { value: 0.05 }, // Scale zoom amount
       uResolution: { value: new THREE.Vector2(width, height) },
-      uImageResolution: { value: new THREE.Vector2(1920, 1080) } // Assuming 16:9 for default
+      uTexture1Resolution: { value: new THREE.Vector2(1920, 1080) },
+      uTexture2Resolution: { value: new THREE.Vector2(1920, 1080) }
     };
     
     uniformRef.current = uniforms;
@@ -91,9 +92,12 @@ export default function Hero() {
       uniforms.uTexture1.value = tex1;
       uniforms.uTexture2.value = tex2;
       
-      // Update image resolution based on the first loaded texture's actual dimensions
       if (tex1.image) {
-        uniforms.uImageResolution.value.set(tex1.image.width, tex1.image.height);
+        uniforms.uTexture1Resolution.value.set(tex1.image.width, tex1.image.height);
+      }
+
+      if (tex2.image) {
+        uniforms.uTexture2Resolution.value.set(tex2.image.width, tex2.image.height);
       }
       
       isTexturesLoaded = true;
@@ -259,7 +263,7 @@ export default function Hero() {
           {/* Left Side: Intro and Title */}
           <div className="flex-1 max-w-lg lg:max-w-xl text-left">
             <p className="text-sm md:text-base text-gray-300 font-medium tracking-widest uppercase mb-6 opacity-90 drop-shadow-md">
-              Hey, I’m Leeshark
+              Hey, I'm Rahul Pandey
             </p>
             
             <h1 className="text-2xl md:text-3xl lg:text-[1rem] xl:text-[3.5rem] font-bold tracking-tighter drop-shadow-2xl leading-[1.05] font-sans">

@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import imgSpiderman from '../assets/spiderman/20260407_055437.png';
-import imgMan from '../assets/man/1775519899126.png';
+import imgMan from '../assets/man/rahul-portrait.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Reuse our hero assets for the dual-identity mask effect prototype
 import imgSpiderman from '../assets/spiderman/20260407_055437.png';
-import imgMan from '../assets/man/1775519899126.png';
+import imgMan from '../assets/man/rahul-portrait.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -99,14 +99,14 @@ export default function About() {
           onMouseLeave={handleMouseLeave}
           style={{ transform: 'translateZ(0)' }} // Hardware acceleration
         >
-          {/* Base Layer: Developer Portrait (Moody/Dark) */}
+          {/* Base Layer: Superhero Persona (Moody/Dark) */}
           <img 
-            src={imgMan} 
-            alt="Developer Persona" 
+            src={imgSpiderman} 
+            alt="Superhero Persona" 
             className="absolute inset-0 w-full h-full object-cover object-center grayscale opacity-60 mix-blend-luminosity brightness-75 transition-all duration-700 group-hover:scale-105"
           />
 
-          {/* Masked Overlay: Superhero Persona (Vibrant) */}
+          {/* Masked Overlay: Developer Portrait */}
           <div 
             ref={maskRef}
             className="absolute inset-0 w-full h-full"
@@ -119,11 +119,13 @@ export default function About() {
               transition: 'clip-path 0.1s ease-out'
             }}
           >
-            <img 
-              src={imgSpiderman} 
-              alt="Hidden Superhero Persona" 
-              className="absolute inset-0 w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-[2s] ease-out"
-            />
+            <div className="absolute inset-0 overflow-hidden">
+              <img 
+                src={imgMan} 
+                alt="Developer Portrait" 
+                className="absolute inset-0 w-full h-full object-cover object-[center_18%] scale-[1.14] transition-transform duration-[2s] ease-out group-hover:scale-[1.18]"
+              />
+            </div>
             
             {/* Inner spotlight glow matched inside the mask */}
             <div className="absolute inset-0 bg-gradient-radial from-transparent via-black/20 to-black/80" />

@@ -24,22 +24,47 @@ uniform float uHovered;
 uniform float uRadius;
 uniform float uSoftness;
 uniform vec2 uResolution;
-uniform vec2 uImageResolution;
+uniform vec2 uTexture1Resolution;
+uniform vec2 uTexture2Resolution;
 
 varying vec2 vUv;
 
-void main() {
-  // Correct the UVs to maintain aspect ratio (background-size: cover equivalent)
+vec2 getCoverUv(vec2 uv, vec2 textureResolution) {
   vec2 ratio = vec2(
-    min((uResolution.x / uResolution.y) / (uImageResolution.x / uImageResolution.y), 1.0),
-    min((uResolution.y / uResolution.x) / (uImageResolution.y / uImageResolution.x), 1.0)
+    min((uResolution.x / uResolution.y) / (textureResolution.x / textureResolution.y), 1.0),
+    min((uResolution.y / uResolution.x) / (textureResolution.y / textureResolution.x), 1.0)
   );
-  
-  vec2 centeredUv = vUv - vec2(0.5);
-  vec2 uvCover = centeredUv * ratio + vec2(0.5);
 
-  // Get the base colors from both textures using the correctly scaled UVs
-  vec4 color1 = texture2D(uTexture1, uvCover);
+  vec2 centeredUv = uv - vec2(0.5);
+  return centeredUv * ratio + vec2(0.5);
+}
+
+vec2 getContainUv(vec2 uv, vec2 textureResolution) {
+  vec2 ratio = vec2(
+    max((uResolution.x / uResolution.y) / (textureResolution.x / textureResolution.y), 1.0),
+    max((uResolution.y / uResolution.x) / (textureResolution.y / textureResolution.x), 1.0)
+  );
+
+  vec2 centeredUv = uv - vec2(0.5);
+  return centeredUv * ratio + vec2(0.5);
+}
+
+vec4 sampleContainedTexture(sampler2D textureSampler, vec2 uv, vec2 textureResolution) {
+  vec2 containUv = getContainUv(uv, textureResolution);
+
+  if (
+    containUv.x < 0.0 || containUv.x > 1.0 ||
+    containUv.y < 0.0 || containUv.y > 1.0
+  ) {
+    return vec4(0.0);
+  }
+
+  return texture2D(textureSampler, containUv);
+}
+
+void main() {
+  vec2 baseUv = getCoverUv(vUv, uTexture1Resolution);
+  vec4 color1 = texture2D(uTexture1, baseUv);
   
   // Add a slight distortion for the top layer near the mask edge
   
@@ -62,11 +87,12 @@ void main() {
   float mask = 1.0 - smoothstep(currentRadius - uSoftness, currentRadius + uSoftness, dist);
   
   // Add a small ripple / distortion on the edge of the mask
-  vec2 distortedUv = uvCover + (mask * (1.0 - mask)) * 0.05 * uHovered;
-  vec4 color2 = texture2D(uTexture2, distortedUv);
+  vec2 distortedUv = vUv + (mask * (1.0 - mask)) * 0.05 * uHovered;
+  vec4 color2 = sampleContainedTexture(uTexture2, distortedUv, uTexture2Resolution);
 
-  // Mix between color1 and color2 based on the mask
-  vec4 finalColor = mix(color1, color2, mask);
+  // Respect the portrait bounds so it only appears inside the reveal area.
+  float reveal = mask * color2.a;
+  vec4 finalColor = mix(color1, vec4(color2.rgb, 1.0), reveal);
 
   // Add subtle light bloom/glow near the cursor using the cursor distance
   float glow = 1.0 - smoothstep(0.0, currentRadius * 1.5, dist);

@@ -109,8 +109,8 @@ export default function Navbar() {
               <path d="M12 2L12 22M2 12L22 12M5 5L19 19M5 19L19 5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
               <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
             </svg>
-            <span className="text-white font-bold tracking-widest uppercase text-sm ml-2 opacity-90 group-hover:opacity-100 transition-opacity">
-              Spider
+            <span className="text-white font-bold tracking-[0.18em] uppercase text-sm ml-2 opacity-90 group-hover:opacity-100 transition-opacity">
+              Rahul Pandey
             </span>
           </div>
 
