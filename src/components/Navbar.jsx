@@ -83,6 +83,13 @@ export default function Navbar() {
     }
   }, [isMobileMenuOpen]);
 
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <>
       <nav 
@@ -90,8 +97,8 @@ export default function Navbar() {
         onMouseMove={handleMouseMove}
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 overflow-hidden ${
           isScrolled 
-            ? 'bg-black/40 backdrop-blur-md border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-4' 
-            : 'bg-transparent py-6'
+            ? 'bg-black/40 backdrop-blur-md border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3 sm:py-4' 
+            : 'bg-transparent py-4 sm:py-6'
         }`}
       >
         {/* Subtle Background Glow Mask */}
@@ -100,16 +107,16 @@ export default function Navbar() {
           className="pointer-events-none absolute w-[300px] h-[300px] bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 mix-blend-screen opacity-0 md:opacity-100 transition-opacity duration-300"
         />
 
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center relative z-10">
           
           {/* Logo */}
-          <div className="flex items-center gap-2 cursor-pointer group">
+          <div className="flex items-center gap-1.5 sm:gap-2 cursor-pointer group min-w-0">
             {/* Minimalist Spider/Web-inspired SVG Logo */}
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-white transition-transform duration-500 group-hover:rotate-45 group-hover:scale-110">
               <path d="M12 2L12 22M2 12L22 12M5 5L19 19M5 19L19 5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
               <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
             </svg>
-            <span className="text-white font-bold tracking-[0.18em] uppercase text-sm ml-2 opacity-90 group-hover:opacity-100 transition-opacity">
+            <span className="text-white font-bold tracking-[0.1em] sm:tracking-[0.18em] uppercase text-[10px] sm:text-sm ml-1.5 sm:ml-2 opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               Rahul Pandey
             </span>
           </div>
@@ -144,7 +151,7 @@ export default function Navbar() {
 
           {/* Mobile Hamburger Toggle */}
           <button 
-            className="md:hidden text-white p-2 z-50 relative"
+            className="md:hidden text-white p-1.5 z-50 relative"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <div className="w-6 h-5 flex flex-col justify-between">
@@ -159,17 +166,17 @@ export default function Navbar() {
       {/* Mobile Fullscreen Menu */}
       <div 
         ref={mobileMenuRef}
-        className="fixed inset-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col justify-center items-center"
+        className="fixed inset-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col justify-center items-center px-6"
         style={{ clipPath: 'circle(0% at 90% 10%)' }}
       >
-        <div className="flex flex-col space-y-8 text-center mt-10">
+        <div className="flex flex-col space-y-7 text-center mt-10">
           {NAV_LINKS.map((link, index) => (
             <a 
               key={link.name} 
               href={link.href}
               ref={el => mobileLinksRef.current[index] = el}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-3xl font-light text-gray-400 hover:text-white transition-colors tracking-widest relative group"
+              className="text-2xl sm:text-3xl font-light text-gray-400 hover:text-white transition-colors tracking-[0.2em] relative group"
             >
               {link.name}
               <span className="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-1/2 group-hover:left-1/4"></span>
@@ -179,7 +186,7 @@ export default function Navbar() {
           <button 
             ref={el => mobileLinksRef.current[NAV_LINKS.length] = el}
             onClick={() => setIsMobileMenuOpen(false)}
-            className="mt-8 px-8 py-3 rounded-full border border-white text-white tracking-widest hover:bg-white hover:text-black transition-all duration-300"
+            className="mt-8 px-8 py-3 rounded-full border border-white text-white tracking-[0.2em] hover:bg-white hover:text-black transition-all duration-300"
           >
             Hire Me
           </button>

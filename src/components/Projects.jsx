@@ -103,7 +103,7 @@ const ProjectCard = ({ project }) => {
 
   return (
     <div 
-      className="project-card relative w-full h-[450px] rounded-xl overflow-hidden cursor-pointer group bg-black border border-white/10"
+      className="project-card relative w-full h-[380px] sm:h-[420px] lg:h-[450px] rounded-xl overflow-hidden cursor-pointer group bg-black border border-white/10"
       style={{ transformStyle: 'preserve-3d' }}
       ref={cardRef}
       onMouseMove={handleMouseMove}
@@ -130,18 +130,18 @@ const ProjectCard = ({ project }) => {
       <div className="absolute inset-0 border border-red-500/0 group-hover:border-red-500/40 rounded-xl transition-colors duration-500 z-20 pointer-events-none" />
 
       {/* Foreground Content */}
-      <div className="absolute inset-0 z-30 p-8 flex flex-col justify-end pointer-events-none" style={{ transform: 'translateZ(30px)' }}> {/* Push text outward on Z axis */}
+      <div className="absolute inset-0 z-30 p-5 sm:p-8 flex flex-col justify-end pointer-events-none" style={{ transform: 'translateZ(30px)' }}> {/* Push text outward on Z axis */}
         
         {/* Dossier Code */}
         <div className="text-red-500/80 font-mono text-xs tracking-[0.3em] mb-2 font-bold uppercase transition-transform duration-500 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100">
           File_ID // {project.id}
         </div>
         
-        <h3 className="text-3xl font-bold tracking-tight text-white mb-3 leading-none drop-shadow-xl font-sans">
+        <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-3 leading-none drop-shadow-xl font-sans">
           {project.name}
         </h3>
         
-        <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6 font-light max-w-[90%]">
+        <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6 font-light max-w-full sm:max-w-[90%]">
           {project.description}
         </p>
         
@@ -154,7 +154,7 @@ const ProjectCard = ({ project }) => {
         </div>
         
         <div className="mt-auto pointer-events-auto w-fit">
-          <a href={project.link} className="flex items-center space-x-2 text-sm uppercase tracking-[0.2em] font-medium text-white group/link relative">
+          <a href={project.link} className="flex items-center space-x-2 text-xs sm:text-sm uppercase tracking-[0.2em] font-medium text-white group/link relative">
             <span className="relative overflow-hidden block">
               <span className="block group-hover/link:-translate-y-full transition-transform duration-300">Access Record</span>
               <span className="block absolute inset-0 translate-y-full group-hover/link:translate-y-0 transition-transform duration-300 text-red-400">Access Record</span>
@@ -209,14 +209,14 @@ export default function Projects() {
     <section 
       id="projects" 
       ref={sectionRef}
-      className="w-full min-h-screen bg-[#030303] py-32 px-6 md:px-12 lg:px-24 flex flex-col justify-center relative overflow-hidden"
+      className="w-full min-h-screen bg-[#030303] py-20 sm:py-32 px-5 sm:px-6 md:px-12 lg:px-24 flex flex-col justify-center relative overflow-hidden"
     >
       <div className="max-w-[90rem] mx-auto w-full relative z-10">
         
         {/* Header Block */}
-        <div ref={headerRef} className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-8">
+        <div ref={headerRef} className="mb-12 sm:mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-8">
           <div className="max-w-2xl">
-            <h2 className="text-4xl md:text-5xl lg:text-[4.5rem] font-bold tracking-tighter text-white font-sans leading-none drop-shadow-lg mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[4.5rem] font-bold tracking-tighter text-white font-sans leading-none drop-shadow-lg mb-4">
               Declassified <span className="font-serif italic font-light opacity-80 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-white pr-2">Missions</span>
             </h2>
           </div>
@@ -226,7 +226,7 @@ export default function Projects() {
         </div>
         
         {/* Grid Container */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-12 place-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 gap-y-8 sm:gap-y-12 place-items-center">
           {VISIONS.map(project => (
             <ProjectCard key={project.id} project={project} />
           ))}

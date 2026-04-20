@@ -42,11 +42,11 @@ export default function Contact() {
     <section 
       id="contact" 
       ref={sectionRef}
-      className="relative w-full min-h-screen bg-[#030303] flex items-center justify-center py-24 px-6 md:px-12 overflow-hidden"
+      className="relative w-full min-h-screen bg-[#030303] flex items-center justify-center py-20 px-5 sm:py-24 sm:px-6 md:px-12 overflow-hidden"
     >
       {/* Intense Background Glow */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0">
-        <div className="w-[800px] h-[500px] bg-red-600/10 rounded-full blur-[150px] mix-blend-screen opacity-50" />
+        <div className="w-[120vw] max-w-[800px] h-[55vw] max-h-[500px] bg-red-600/10 rounded-full blur-[150px] mix-blend-screen opacity-50" />
       </div>
 
       <div className="max-w-2xl w-full relative z-10 flex flex-col items-center text-center">
@@ -56,10 +56,10 @@ export default function Contact() {
           <p className="text-red-500 font-mono text-sm tracking-[0.3em] uppercase font-bold mb-4">
             [ Encrypted Channel ]
           </p>
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-white font-sans leading-none mb-6 drop-shadow-xl">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter text-white font-sans leading-none mb-6 drop-shadow-xl">
             Let's <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-white font-serif italic pr-2">Connect</span>
           </h2>
-          <p className="text-gray-400 font-light text-lg tracking-wide leading-relaxed max-w-xl mx-auto">
+          <p className="text-gray-400 font-light text-base sm:text-lg tracking-wide leading-relaxed max-w-xl mx-auto">
             Whether you have a groundbreaking tech vision, a complex application to build, or just want to talk shop—my inbox is always open. Let’s collaborate and architect the digital tools of tomorrow.
           </p>
         </div>

@@ -14,12 +14,18 @@
   }
 }
 
-body, html {
+html,
+body {
   margin: 0;
   padding: 0;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
   background-color: #000;
   color: white;
+}
+
+#root {
+  min-height: 100vh;
+  overflow-x: hidden;
 }

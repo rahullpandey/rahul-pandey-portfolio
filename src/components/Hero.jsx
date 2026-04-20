@@ -139,15 +139,21 @@ export default function Hero() {
     gsap.ticker.add(renderTick);
 
     // 5. Setup interaction event handlers
-    const onMouseMove = (e) => {
+    const updatePointerTarget = (clientX, clientY) => {
       const rect = container.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / width;
+      const currentWidth = rect.width || container.clientWidth || 1;
+      const currentHeight = rect.height || container.clientHeight || 1;
+      const x = (clientX - rect.left) / currentWidth;
       // In Three.js UV space, Y=0 is bottom, Y=1 is top.
-      const y = 1.0 - ((e.clientY - rect.top) / height);
+      const y = 1.0 - ((clientY - rect.top) / currentHeight);
       
       mouseTarget.current.x = x;
       mouseTarget.current.y = y;
-      
+    };
+
+    const onMouseMove = (e) => {
+      updatePointerTarget(e.clientX, e.clientY);
+
       // For DOM cursor, use standard coordinates
       if(cursorRef.current) {
         // Just store regular pixel coords in DOM cursor directly for zero latency, 
@@ -203,9 +209,7 @@ export default function Hero() {
     const onTouch = (e) => {
         if(e.touches.length > 0) {
             const touch = e.touches[0];
-            const rect = container.getBoundingClientRect();
-            mouseTarget.current.x = (touch.clientX - rect.left) / width;
-            mouseTarget.current.y = 1.0 - ((touch.clientY - rect.top) / height);
+            updatePointerTarget(touch.clientX, touch.clientY);
             
             // Toggle hover effect on touch
             if (!isHovered) {
@@ -213,9 +217,15 @@ export default function Hero() {
             }
         }
     };
+
+    const onTouchEnd = () => {
+      onMouseLeave();
+    };
     
     container.addEventListener('touchstart', onTouch);
     container.addEventListener('touchmove', onTouch);
+    container.addEventListener('touchend', onTouchEnd);
+    container.addEventListener('touchcancel', onTouchEnd);
 
     // 7. Cleanup
     return () => {
@@ -226,6 +236,8 @@ export default function Hero() {
       container.removeEventListener('mouseleave', onMouseLeave);
       container.removeEventListener('touchstart', onTouch);
       container.removeEventListener('touchmove', onTouch);
+      container.removeEventListener('touchend', onTouchEnd);
+      container.removeEventListener('touchcancel', onTouchEnd);
       
       container.removeChild(renderer.domElement);
       renderer.dispose();
@@ -236,7 +248,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-black flex items-center justify-center">
+    <div className="relative w-full min-h-[100svh] overflow-hidden bg-black flex items-center justify-center">
       {/* Three.js Canvas Container */}
       <div 
         ref={containerRef} 
@@ -246,7 +258,7 @@ export default function Hero() {
       {/* Custom Cursor / Light Bloom Overlay */}
       <div 
         ref={cursorRef}
-        className="fixed top-0 left-0 w-32 h-32 rounded-full pointer-events-none z-20 mix-blend-screen opacity-0 scale-0"
+        className="fixed top-0 left-0 hidden md:block w-32 h-32 rounded-full pointer-events-none z-20 mix-blend-screen opacity-0 scale-0"
         style={{
           background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)',
           transform: 'translate(-50%, -50%)' // Center the glow on the mouse point
@@ -254,19 +266,19 @@ export default function Hero() {
       />
       
       {/* Foreground UI Components */}
-      <div ref={textRef} className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-center mx-auto w-full max-w-[90rem] px-8 lg:px-16 mt-20">
+      <div ref={textRef} className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-end md:justify-center mx-auto w-full max-w-[90rem] px-5 pb-10 pt-28 sm:px-8 sm:pb-14 sm:pt-32 lg:px-16">
         <div 
-          className="w-full flex flex-col md:flex-row justify-between md:items-end transition-all duration-700 ease-out transform gap-10" 
-          style={{ transform: isHovered ? 'translateY(-20px)' : 'translateY(0px)' }}
+          className="w-full flex flex-col md:flex-row justify-between md:items-end transition-all duration-700 ease-out transform gap-8 md:gap-10" 
+          style={{ transform: isHovered ? 'translateY(-12px)' : 'translateY(0px)' }}
         >
             
           {/* Left Side: Intro and Title */}
-          <div className="flex-1 max-w-lg lg:max-w-xl text-left">
-            <p className="text-sm md:text-base text-gray-300 font-medium tracking-widest uppercase mb-6 opacity-90 drop-shadow-md">
+          <div className="flex-1 max-w-full md:max-w-lg lg:max-w-xl text-left">
+            <p className="text-xs sm:text-sm md:text-base text-gray-300 font-medium tracking-[0.3em] uppercase mb-4 sm:mb-6 opacity-90 drop-shadow-md">
               Hey, I'm Rahul Pandey
             </p>
             
-            <h1 className="text-2xl md:text-3xl lg:text-[1rem] xl:text-[3.5rem] font-bold tracking-tighter drop-shadow-2xl leading-[1.05] font-sans">
+            <h1 className="text-[2.4rem] sm:text-5xl lg:text-[4.25rem] font-bold tracking-tighter drop-shadow-2xl leading-[1.02] font-sans">
               Crafting Digital<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 font-serif italic font-light pr-2">Excellence</span> from<br />
               End to End
@@ -274,12 +286,12 @@ export default function Hero() {
           </div>
           
           {/* Right Side: Description and CTA */}
-          <div className=" flex-1 max-w-md text-left md:text-right flex flex-col md:items-end">
-            <p className="w-110 text-lg md:text-xl text-gray-300 drop-shadow-xl font-light tracking-wide leading-relaxed mb-8">
+          <div className="flex-1 w-full max-w-full md:max-w-md text-left md:text-right flex flex-col md:items-end">
+            <p className="w-full text-base sm:text-lg md:text-xl text-gray-300 drop-shadow-xl font-light tracking-wide leading-relaxed mb-6 sm:mb-8">
               I build scalable web applications that merge striking design with robust, high-performance functionality. Seamless interactions, engineered for the future.
             </p>
             
-            <button className="pointer-events-auto px-8 py-4 rounded-full border border-white/30 text-white text-sm tracking-[0.2em] uppercase font-medium hover:bg-white hover:text-black hover:border-white transition-all duration-500 backdrop-blur-sm shadow-xl inline-block">
+            <button className="pointer-events-auto w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-full border border-white/30 text-white text-xs sm:text-sm tracking-[0.2em] uppercase font-medium hover:bg-white hover:text-black hover:border-white transition-all duration-500 backdrop-blur-sm shadow-xl inline-block">
               Start a Project
             </button>
           </div>
